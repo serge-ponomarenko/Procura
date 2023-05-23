@@ -1,0 +1,44 @@
+version: '3.7'
+services:
+  procura-db:
+    container_name: procura-db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: procura
+    ports:
+      - 5432:5432
+    networks:
+      - procura-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d procura" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/
+
+  procura-app:
+    build:
+      context: .
+    container_name: procura
+    image: sergemob/procura:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - procura-network
+    depends_on:
+      procura-db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://procura-db:5432/procura
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENTID=${OAUTH2_GOOGLE_CLIENT_ID}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENTSECRET=${OAUTH2_GOOGLE_CLIENT_SECRET}
+
+networks:
+  procura-network:
+    name: procura-network

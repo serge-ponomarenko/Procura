@@ -1,2 +1,2 @@
-# SMSA
-Stock Management System Application
+# Procura
+Stock Management and Supply System Application
