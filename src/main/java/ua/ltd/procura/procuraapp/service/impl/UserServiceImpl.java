@@ -12,6 +12,7 @@ import ua.ltd.procura.procuraapp.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
@@ -68,24 +69,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void processOAuthPostLogin(String name, String email) {
-        userRepository.findByEmail(email).ifPresentOrElse(u -> System.out.println("Access granted for user: " + u),
+        userRepository.findByEmail(email).ifPresentOrElse(user -> { },
                 () -> {
                     Role role = checkAdminRoleExist();
 
                     User user = User.builder()
                             .name(name)
                             .email(email)
-                            .password("TEMP")
+                            .password("TEMP")  //todo: need to handle this
                             .provider(User.Provider.GOOGLE)
                             .roles(List.of(role))
                             .build();
 
                     userRepository.save(user);
 
-                    System.out.println("Created new user: " + user);
                 }
         );
-
-
     }
 }

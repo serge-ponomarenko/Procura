@@ -17,6 +17,8 @@ import ua.ltd.procura.procuraapp.dto.UserOAuth2Dto;
 import ua.ltd.procura.procuraapp.service.UserService;
 import ua.ltd.procura.procuraapp.service.impl.UserOAuth2Service;
 
+import static ua.ltd.procura.procuraapp.constants.UriStorage.LOGIN;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class SpringSecurity {
     private final UserOAuth2Service oauthUserService;
 
     private static final String[] allowedStaticUri = {"/css/**", "/js/**", "/img/**", "/favicon.ico"};
-    private static final String[] allowedUri = {"/register/**", "/index", "/oauth/**"};
+    private static final String[] allowedUri = {"/register/**", "/index", "/login", "/oauth/**"};
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -49,7 +51,7 @@ public class SpringSecurity {
                                                 .requestMatchers(allowedStaticUri).permitAll()
                                 ).oauth2Login(
                                         oauth -> oauth
-                                                .loginPage("/login")
+                                                .loginPage(LOGIN)
                                                 .userInfoEndpoint(config -> config.userService(oauthUserService))
                                                 .successHandler((request, response, authentication) -> {
                                                     UserOAuth2Dto oauthUser = (UserOAuth2Dto) authentication.getPrincipal();
@@ -59,7 +61,7 @@ public class SpringSecurity {
                                                 .permitAll()
                                 ).formLogin(
                                         form -> form
-                                                .loginPage("/login")
+                                                .loginPage(LOGIN)
                                                 .defaultSuccessUrl(UriStorage.USERS, true)
                                                 .permitAll()
                                 ).logout(
@@ -78,7 +80,7 @@ public class SpringSecurity {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder());
     }
 }
