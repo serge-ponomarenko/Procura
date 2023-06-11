@@ -1,0 +1,137 @@
+<!doctype html>
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+  <head th:replace="~{fragments/fragments :: head(title='new_order.title')}">
+    ...
+  </head>
+  <body >
+    <script src="/js/main-theme.min.js"></script>
+    <div class="page">
+
+      <!-- Sidebar -->
+      <aside th:replace="~{fragments/fragments :: sidebar}">
+        ...
+      </aside>
+
+      <!-- Navbar -->
+      <header th:replace="~{fragments/fragments :: header}">
+        ...
+      </header>
+      <div class="page-wrapper">
+
+
+        <!-- Page header -->
+        <div class="page-header d-print-none">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Overview
+                </div>
+                <h2 class="page-title">
+                  Create new order
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row row-deck row-cards">
+              <div class="col-12">
+                <form class="card" th:action="@{/orders}" th:object="${order}" method="post">
+                  <div class="card-header">
+                    <h3 class="card-title">Order details</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="mb-3 row">
+                      <label class="col-3 col-form-label required">Internal ID</label>
+                      <div class="col">
+                        <input type="text" class="form-control" id="internalId" name="internalId" th:field="*{internalId}" placeholder="Enter internal ID"
+                               th:classappend="${#fields.hasErrors('internalId')} ? 'is-invalid'">
+                        <small class="form-hint">Internal ID of creating order.</small>
+                        <div th:if="${#fields.hasErrors('internalId')}" th:errors="*{internalId}" class="invalid-feedback"></div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-3 col-form-label required">Order name</label>
+                      <div class="col">
+                        <input type="text" class="form-control" id="name" name="name" th:field="*{name}" placeholder="Order name"
+                               th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
+                        <small class="form-hint">Name of the order.</small>
+                        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="invalid-feedback"></div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-3 col-form-label">Client name</label>
+                      <div class="col">
+                        <input type="text" class="form-control" id="clientName" name="clientName" th:field="*{clientName}" placeholder="Client name"
+                               th:classappend="${#fields.hasErrors('clientName')} ? 'is-invalid'">
+                        <small class="form-hint">Client name or other client information.</small>
+                        <div th:if="${#fields.hasErrors('clientName')}" th:errors="*{clientName}" class="invalid-feedback"></div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-3 col-form-label">Price, $</label>
+                      <div class="col">
+                        <input type="text" class="form-control" id="price" name="price" th:field="*{price}" placeholder="Price"
+                               th:classappend="${#fields.hasErrors('price')} ? 'is-invalid'">
+                        <small class="form-hint">Order price.</small>
+                        <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="invalid-feedback"></div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-3 col-form-label">Finish date</label>
+                      <div class="col">
+                        <input class="form-control" name="finishDate" th:field="*{finishDate}" placeholder="Select a finish date" id="datepicker-icon"
+                               th:classappend="${#fields.hasErrors('finishDate')} ? 'is-invalid'">
+                        <small class="form-hint">Date when this order must be finished.</small>
+                        <div th:if="${#fields.hasErrors('finishDate')}" th:errors="*{finishDate}" class="invalid-feedback"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer text-end">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <footer th:replace="~{fragments/fragments :: footer}">
+          ...
+        </footer>
+      </div>
+    </div>
+
+    <!-- Libs JS -->
+
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js" defer></script>
+    <script src="/js/main.min.js" defer></script>
+    <script src="/js/litepicker.js" defer=""></script>
+    <script>
+    // @formatter:off
+    document.addEventListener("DOMContentLoaded", function () {
+    	window.Litepicker && (new Litepicker({
+    		element: document.getElementById('datepicker-icon'),
+    		buttonText: {
+    			previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+    			nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+    		},
+    	}));
+    });
+    // @formatter:on
+  </script>
+  </body>
+</html>

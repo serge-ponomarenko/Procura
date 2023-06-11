@@ -12,7 +12,6 @@ import ua.ltd.procura.procuraapp.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor

@@ -1,17 +1,14 @@
 package ua.ltd.procura.procuraapp.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import ua.ltd.procura.procuraapp.constants.GlobalConstants;
 import ua.ltd.procura.procuraapp.constants.UriStorage;
 import ua.ltd.procura.procuraapp.dto.UserDto;
@@ -19,7 +16,6 @@ import ua.ltd.procura.procuraapp.entity.AppLocale;
 import ua.ltd.procura.procuraapp.service.AppLocaleService;
 import ua.ltd.procura.procuraapp.service.UserService;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -30,9 +26,9 @@ public class AuthController {
     private final UserService userService;
     private final AppLocaleService appLocaleService;
 
-    @GetMapping(UriStorage.INDEX)
+    @GetMapping({UriStorage.INDEX, UriStorage.HOME})
     public String home() {
-        return "index";
+        return "redirect:" + UriStorage.ORDERS;
     }
 
     @GetMapping(UriStorage.LOGIN)
@@ -41,7 +37,6 @@ public class AuthController {
         return "login";
     }
 
-    // handler method to handle user registration request
     @GetMapping(UriStorage.REGISTER)
     public String showRegistrationForm(Model model) {
         UserDto user = new UserDto();
@@ -50,9 +45,8 @@ public class AuthController {
         return "register";
     }
 
-    // handler method to handle register user form submit request
     @PostMapping(UriStorage.REGISTER_SAVE)
-    public String registration(@Valid @ModelAttribute("user") UserDto user,
+    public String registerUser(@Valid @ModelAttribute("user") UserDto user,
                                BindingResult result,
                                Model model) {
 
@@ -66,13 +60,6 @@ public class AuthController {
         }
         userService.saveUser(user);
         return "redirect:" + UriStorage.REGISTER + "?success";
-    }
-
-    @GetMapping(UriStorage.USERS)
-    public String listRegisteredUsers(Model model, Authentication authentication, HttpServletRequest request) {
-        List<UserDto> users = userService.findAllUsers();
-        model.addAttribute("users", users);
-        return "users";
     }
 
     private void initLocales(Model model) {

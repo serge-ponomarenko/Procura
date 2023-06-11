@@ -1,0 +1,19 @@
+<!doctype html>
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<body>
+Authenticated username:
+<div sec:authentication="name"></div>
+<!--Authenticated user's firstName:-->
+<!--<div sec:authentication="principal.firstName"></div>-->
+<!--Authenticated user's lastName:-->
+<!--<div sec:authentication="principal.lastName"></div>-->
+<!--Authenticated user's email:-->
+<!--<div sec:authentication="principal.lastName"></div>-->
+<!--Authenticated user roles:-->
+<!--<div sec:authentication="principal.authorities"></div>-->
+</body>
+</html>

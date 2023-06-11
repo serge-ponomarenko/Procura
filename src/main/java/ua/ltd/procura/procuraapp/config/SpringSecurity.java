@@ -29,7 +29,7 @@ public class SpringSecurity {
     private final UserOAuth2Service oauthUserService;
 
     private static final String[] allowedStaticUri = {"/css/**", "/js/**", "/img/**", "/favicon.ico"};
-    private static final String[] allowedUri = {"/register/**", "/index", "/login", "/oauth/**"};
+    private static final String[] allowedUri = {"/register/**", "/index", "/login", "/oauth/**", "/error", "/"};
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -45,7 +45,8 @@ public class SpringSecurity {
                                 .authorizeHttpRequests(
                                         authorize -> authorize
                                                 .requestMatchers(allowedUri).permitAll()
-                                                .requestMatchers("/users").hasRole("ADMIN")
+                                                .requestMatchers("/orders/**").hasRole("ADMIN")
+                                                .requestMatchers("/debug").authenticated()
                                 ).authorizeHttpRequests(
                                         authStatic -> authStatic
                                                 .requestMatchers(allowedStaticUri).permitAll()
@@ -56,13 +57,13 @@ public class SpringSecurity {
                                                 .successHandler((request, response, authentication) -> {
                                                     UserOAuth2Dto oauthUser = (UserOAuth2Dto) authentication.getPrincipal();
                                                     userService.processOAuthPostLogin(oauthUser.getName(), oauthUser.getEmail());
-                                                    response.sendRedirect(UriStorage.USERS);
+                                                    response.sendRedirect(UriStorage.ORDERS);
                                                 })
                                                 .permitAll()
                                 ).formLogin(
                                         form -> form
                                                 .loginPage(LOGIN)
-                                                .defaultSuccessUrl(UriStorage.USERS, true)
+                                                .defaultSuccessUrl(UriStorage.ORDERS, true)
                                                 .permitAll()
                                 ).logout(
                                         logout -> logout
