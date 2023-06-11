@@ -28,8 +28,24 @@ public class SpringSecurity {
     private final UserDetailsService userDetailsService;
     private final UserOAuth2Service oauthUserService;
 
-    private static final String[] allowedStaticUri = {"/css/**", "/js/**", "/img/**", "/favicon.ico"};
-    private static final String[] allowedUri = {"/register/**", "/index", "/login", "/oauth/**", "/error", "/"};
+    private static final String[] allowedStaticUri = {
+            "/css/**",
+            "/js/**",
+            "/img/**",
+            "/favicon.ico"
+    };
+    private static final String[] allowedUri = {
+            "/register/**",
+            "/index",
+            "/login",
+            "/oauth/**",
+            "/actuator/**",
+            "/error",
+            "/"
+    };
+    private static final String[] adminAllowedUri = {
+            "/orders/**"
+    };
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -45,7 +61,7 @@ public class SpringSecurity {
                                 .authorizeHttpRequests(
                                         authorize -> authorize
                                                 .requestMatchers(allowedUri).permitAll()
-                                                .requestMatchers("/orders/**").hasRole("ADMIN")
+                                                .requestMatchers(adminAllowedUri).hasRole("ADMIN")
                                                 .requestMatchers("/debug").authenticated()
                                 ).authorizeHttpRequests(
                                         authStatic -> authStatic
