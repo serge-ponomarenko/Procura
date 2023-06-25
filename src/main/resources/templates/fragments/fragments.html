@@ -279,6 +279,28 @@
           </script>
         </div>
 
+        <!-- Modal Delete confirmation -->
+        <div th:fragment="modalDelete(title, message, path)" class="modal modal-blur fade" id="modal-delete" tabindex="-1" style="display: none;" aria-hidden="true">
+          <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="modal-title">[[ ${title} ]]</div>
+                <div>[[ ${message} ]]</div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
+                <a id="deleteConfirmLink" th:href="${path}" class="btn btn-danger">Delete</a>
+              </div>
+            </div>
+          </div>
+          <script>
+            document.getElementById('modal-delete').addEventListener('show.bs.modal', function(e) {
+              document.getElementById('deleteConfirmLink').href =
+                "[[ ${path} ]]" + e.relatedTarget.dataset.id;
+            });
+          </script>
+        </div>
+
       </div>
     </div>
 

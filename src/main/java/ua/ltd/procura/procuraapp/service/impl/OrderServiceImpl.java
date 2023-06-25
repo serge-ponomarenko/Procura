@@ -1,5 +1,6 @@
 package ua.ltd.procura.procuraapp.service.impl;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,6 +13,8 @@ import ua.ltd.procura.procuraapp.service.OrderService;
 
 import java.util.Optional;
 
+import static ua.ltd.procura.procuraapp.repository.OrderRepository.hasAnyFieldContains;
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -20,19 +23,33 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void saveOrder(OrderDto orderDto) {
-        Order order = Order.builder()
-                .internalId(orderDto.getInternalId())
-                .name(orderDto.getName())
-                .clientName(orderDto.getClientName())
-                .price(orderDto.getPrice())
-                .finishDate(orderDto.getFinishDate())
-                .build();
+        Order order;
+        if (orderDto.getId() == null) {
+            order = Order.builder()
+                    .internalId(orderDto.getInternalId())
+                    .name(orderDto.getName())
+                    .clientName(orderDto.getClientName())
+                    .price(orderDto.getPrice())
+                    .finishDate(orderDto.getFinishDate())
+                    .build();
+        } else {
+            order = orderRepository.findById(orderDto.getId()).orElseThrow(); //todo
+            updateFields(order, orderDto);
+        }
         orderRepository.save(order);
     }
 
+    private void updateFields(Order order, OrderDto orderDto) {
+        order.setInternalId(orderDto.getInternalId());
+        order.setName(orderDto.getName());
+        order.setClientName(orderDto.getClientName());
+        order.setPrice(orderDto.getPrice());
+        order.setFinishDate(orderDto.getFinishDate());
+    }
+
     @Override
-    public Optional<Order> findById(long id) {
-        return orderRepository.findById(id);
+    public Optional<OrderDto> findById(long id) {
+        return orderRepository.findById(id).map(this::convertEntityToDto);
     }
 
     @Override
@@ -60,4 +77,17 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
+    @Override
+    public void deleteById(Long id) {
+        orderRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<OrderDto> findByInternalIdLikeOrNameLikeOrClientNameLike(String str, @NotNull Pageable pageable) {
+        Page<Order> orders = orderRepository.findAll(hasAnyFieldContains(str), pageable);
+
+        return new PageImpl<>(orders.getContent().stream()
+                .map(this::convertEntityToDto)
+                .toList(), pageable, orders.getTotalElements());
+    }
 }

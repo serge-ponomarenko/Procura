@@ -39,6 +39,10 @@ jobs:
           script: |
             mkdir -p procura
             cd procura
+            mkdir -p grafana
+            mkdir -p prometheus
+            sudo chmod 777 grafana
+            sudo chmod 777 prometheus
             git init
             git remote add origin https://github.com/serge-ponomarenko/Procura.git
             git fetch origin

@@ -3,6 +3,7 @@ package ua.ltd.procura.procuraapp.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ public class OrderDto
     private String clientName;
     @PositiveOrZero
     private BigDecimal price;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate finishDate;
 
 }

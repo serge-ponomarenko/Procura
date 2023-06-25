@@ -32,7 +32,8 @@
                   Overview
                 </div>
                 <h2 class="page-title">
-                  Create new order
+                  <th:block th:if="${action == null || action.equals('new')}">Create new order</th:block>
+                  <th:block th:if="${action != null && action.equals('edit')}">Edit order</th:block>
                 </h2>
               </div>
             </div>
@@ -46,6 +47,7 @@
             <div class="row row-deck row-cards">
               <div class="col-12">
                 <form class="card" th:action="@{/orders}" th:object="${order}" method="post">
+                  <input type="hidden" name="id" th:field="*{id}" />
                   <div class="card-header">
                     <h3 class="card-title">Order details</h3>
                   </div>
