@@ -25,6 +25,7 @@ services:
       context: .
     container_name: procura
     image: sergemob/procura:latest
+    restart: always
     ports:
       - "8080:8080"
     networks:
@@ -41,6 +42,7 @@ services:
 
   grafana:
     build: './config/grafana'
+    restart: always
     ports:
       - 3000:3000
     volumes:
@@ -55,6 +57,7 @@ services:
 
   prometheus:
     image: prom/prometheus
+    restart: always
     ports:
       - 9090:9090
     volumes:

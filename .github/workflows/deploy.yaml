@@ -21,13 +21,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Get Version
+        uses: entimaniac/read-pom-version-action@1.0.0
+        id: getVersion
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: sergemob/procura:latest
+          tags: sergemob/procura:${{ steps.getVersion.outputs.version }}, sergemob/procura:latest
 
   deploy_to_server:
     runs-on: ubuntu-latest

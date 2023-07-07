@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ua.ltd.procura</groupId>
 	<artifactId>procura-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.7-SNAPSHOT</version>
 	<name>procura-app</name>
 	<description>Stock Management and Supply System Application</description>
 	<properties>
